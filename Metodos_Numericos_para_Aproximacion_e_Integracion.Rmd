@@ -1,0 +1,192 @@
+---
+title: "Métodos numéricos para aproximación e integración"
+author: "Juan Pablo Gómez Morales"
+date: "2025-11-28"
+output: html_document
+---
+
+Interpolador de Lagrange:
+```{r}
+lagrange <- function(x, y, x_eval) {
+  n <- length(x) # Número de puntos (el vector de puntos se debe crear antes de ejecutar la función)
+  resultado <- 0 # Aquí guardaremos el resultado final
+  
+  for (i in 1:n) { 
+    L <- 1    # Inicializamos el polinomio base L_i
+    
+    for (j in 1:n) {  # Para construir L_i, revisamos todos los puntos
+      if (j != i) { # Nos saltamos el punto actual (i)
+        # Fórmula de Lagrange:
+        L <- L * (x_eval - x[j]) / (x[i] - x[j])
+      }
+    }
+    
+    # Sumamos la contribución de este punto:
+    resultado <- resultado + y[i] * L
+  }
+  
+  # Gráfico
+  x_seq <- seq(min(x)-1, max(x)+1, length=100) # Aquí ajustamos el intervalo de la gráfica (min(x)-1, max(x)+1)
+  y_seq <- sapply(x_seq, function(xp) {
+    total <- 0
+    for (i in 1:n) {
+      L <- 1
+      for (j in 1:n) if (j != i) L <- L * (xp - x[j]) / (x[i] - x[j])
+      total <- total + y[i] * L
+    }
+    total
+  })
+  
+  plot(x_seq, y_seq, type="l", col="blue", main="Interpolación de Lagrange",
+       xlab="x", ylab="P(x)", lwd=2)
+  points(x, y, col="red", pch=19, cex=1.5)
+  return(resultado)
+}
+```
+
+Comprobamos que el código esté bien con una prueba:
+```{r}
+# Ejemplo de uso
+x <- c(-1, 2, 4)    # Puntos x
+y <- c(1, 3, 2)    # Puntos y
+# Evaluamos en un punto
+cat("P(2) =", lagrange(x, y, 2), "\n")
+cat("P(3) =", lagrange(x, y, 3))
+```
+
+
+Regla del trapecio compuesta:
+```{r}
+trapecio_compuesto <- function(f, a, b, n) { # n define la cantidad de intervalos)
+  # Calculamos el ancho de cada subintervalo
+  h <- (b - a) / n
+  
+  # Generamos los puntos x_i (excluyendo los extremos)
+  x <- seq(a + h, b - h, length.out = n - 1)
+  
+  # Calculamos la suma de f(x_i) para i = 1 hasta n-1
+  suma_fx <- sum(f(x))
+  
+  # Aplicamos la fórmula del trapecio compuesto
+  integral <- (h / 2) * (f(a) + (2 * suma_fx) + f(b))
+  
+  # Calcular error (para f(x) = x^2 en [0,1])
+  valor_exacto <- (b^3 - a^3) / 3
+  error <- abs(integral - valor_exacto)
+  
+  cat("Integral aproximada:", integral, "\n")
+  cat("Error:", error, "\n")
+  
+  return(integral)
+}
+```
+
+
+
+```{r}
+# Ejemplo de uso
+mi_funcion <- function(x) exp(x^(-3))
+resultado <- trapecio_compuesto(mi_funcion, 0, 10, 10)
+```
+
+```{r}
+resultado <- trapecio_compuesto(mi_funcion, 0.3, 10, 30000000)
+```
+
+Gráfica:
+```{r}
+# Definir la función
+f <- function(x) exp(x^(-3))
+
+# Crear valores para x (evitando x=0)
+x <- seq(0.5, 1, length.out = 1000)
+y <- f(x)
+
+# Graficar
+plot(x, y, type = "l", lwd = 2, col = "blue", 
+     main = "exp(x^(-3))",
+     xlab = "x", ylab = "f(x)")
+
+# Sombrear el área bajo la curva
+polygon(c(x, rev(x)), c(y, rep(0, length(y))), 
+        col = rgb(0.8, 0.8, 1, 0.5), border = NA)
+
+# Redibujar la línea para que quede encima
+lines(x, y, lwd = 2, col = "blue")
+```
+
+Regla del punto medio de Riemann:
+```{r}
+punto_medio <- function(f, a, b, n) {
+  h <- (b - a) / n
+  x <- seq(a + h/2, b - h/2, length.out = n)
+  aproximacion <- sum(f(x) * h)
+  return(aproximacion)
+}
+
+# Ejemplo: integral de x^2 en [0, 2]
+f <- function(x) x^2
+a <- 0
+b <- 2
+n <- 10
+
+# Cálculo
+resultado <- punto_medio(f, a, b, n)
+valor_real <- 8/3
+error <- abs(resultado - valor_real)
+
+cat("Aproximación:", resultado, "\n")
+cat("Error:", error, "\n")
+
+# Gráfica
+x_vals <- seq(a, b, length.out = 1000)
+y_vals <- f(x_vals)
+
+plot(x_vals, y_vals, type = "l", lwd = 2, col = "blue",
+     xlab = "x", ylab = "f(x)", main = "Regla del Punto Medio")
+
+# Dibujar rectángulos
+h <- (b - a) / n
+x_puntos <- seq(a + h/2, b - h/2, by = h)
+
+for(i in 1:n) {
+  x_left <- a + (i-1)*h
+  x_right <- a + i*h
+  y_mid <- f(x_puntos[i])
+  rect(x_left, 0, x_right, y_mid, border = "red", col = rgb(1,0,0,0.2))
+}
+```
+
+Método de Simpson:
+```{r}
+simpson <- function(f, a, b, n) {
+  if (n %% 2 != 0) stop("n debe ser par")
+  h <- (b - a) / n
+  x <- seq(a, b, by = h)
+  y <- f(x)
+  suma <- y[1] + y[length(y)] + 4*sum(y[seq(2, n, by=2)]) + 2*sum(y[seq(3, n-1, by=2)])
+  return((h/3) * suma)
+}
+
+# Ejemplo: integral de x^2 en [0, 2]
+f <- function(x) x^2
+a <- 0
+b <- 2
+n <- 8
+
+resultado <- simpson(f, a, b, n)
+valor_real <- 8/3
+error <- abs(resultado - valor_real)
+
+cat("Aproximación:", resultado, "\n")
+cat("Error:", error, "\n")
+
+# Gráfica sencilla
+x_vals <- seq(a, b, length.out = 1000)
+y_vals <- f(x_vals)
+plot(x_vals, y_vals, type = "l", lwd = 2, col = "blue")
+x_puntos <- seq(a, b, length.out = n+1)
+y_puntos <- f(x_puntos)
+points(x_puntos, y_puntos, col = "red", pch = 16)
+```
+
