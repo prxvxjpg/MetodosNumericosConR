@@ -7,6 +7,9 @@ Este repositorio implementa ocho métodos numéricos esenciales en R Markdown. E
 
 ## 🚀 Ejecución rápida
 
+### Visualización rápida de los códigos:
+https://img.shields.io/badge/Ver_Implementaci%C3%B3n_en_GitHub_Pages-4285F4?style=for-the-badge&logo=github&logoColor=white&labelColor=4285F4&color=34A853
+
 ### Prerrequisitos
 ```r
 # Instalar paquetes necesarios
@@ -21,8 +24,6 @@ install.packages(c("ggplot2", "dplyr", "knitr", "rmarkdown"))
 1. Clonar el repositorio
 2. Abrir el archivo en RStudio
 3. Hacer clic en "Knit" para generar el informe HTML/PDF
-
-### Visualización rápida de los códigos:
 
 ---
 
