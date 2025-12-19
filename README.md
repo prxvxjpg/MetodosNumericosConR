@@ -5,7 +5,7 @@ Este repositorio implementa ocho métodos numéricos esenciales en R Markdown. E
 
 ---
 
-## 🚀 Ejecución Rápida
+## 🚀 Ejecución rápida
 
 ### Prerrequisitos
 ```r
@@ -14,13 +14,15 @@ install.packages(c("ggplot2", "dplyr", "knitr", "rmarkdown"))
 ```
 
 ### Archivos principales
-- **`Metodos_Numericos.Rmd`** - Documento principal que contiene todos los métodos implementados
-- **`funciones_auxiliares.R`** - Funciones auxiliares y de utilidad (si aplica)
+- **`MetodosParaCalcularRaicesDeFunciones.Rmd`** - Documento principal que contiene todos los métodos implementados
+- **`Metodos_Numericos_para_Aproximacion_e_Integracion.R`** - Funciones auxiliares y de utilidad (si aplica)
 
 ### Ejecutar en RStudio
 1. Clonar el repositorio
-2. Abrir `Metodos_Numericos.Rmd` en RStudio
+2. Abrir el archivo en RStudio
 3. Hacer clic en "Knit" para generar el informe HTML/PDF
+
+### Visualización rápida de los códigos:
 
 ---
 
