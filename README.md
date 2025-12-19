@@ -8,7 +8,7 @@ Este repositorio implementa ocho métodos numéricos esenciales en R Markdown. E
 ## 🚀 Ejecución rápida
 
 ### Visualización rápida de los códigos:
-https://img.shields.io/badge/Ver_Implementaci%C3%B3n_en_GitHub_Pages-4285F4?style=for-the-badge&logo=github&logoColor=white&labelColor=4285F4&color=34A853
+[![Ver Implementación en GitHub Pages](https://img.shields.io/badge/Ver_Implementación_en_GitHub_Pages-4285F4?style=for-the-badge&logo=github&logoColor=white&labelColor=4285F4&color=34A853)](https://prxvxjpg.github.io/MetodosNumericosConR/)
 
 ### Prerrequisitos
 ```r
