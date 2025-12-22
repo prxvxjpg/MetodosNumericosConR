@@ -17,8 +17,8 @@ install.packages(c("ggplot2", "dplyr", "knitr", "rmarkdown"))
 ```
 
 ### Archivos principales
-- **`MetodosParaCalcularRaicesDeFunciones.Rmd`** - Documento principal que contiene todos los métodos implementados
-- **`Metodos_Numericos_para_Aproximacion_e_Integracion.R`** - Funciones auxiliares y de utilidad (si aplica)
+- **`MetodosParaCalcularRaicesDeFunciones.Rmd`** 
+- **`Metodos_Numericos_para_Aproximacion_e_Integracion.R`** 
 
 ### Ejecutar en RStudio
 1. Clonar el repositorio
